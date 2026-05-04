@@ -13,12 +13,12 @@
       # 30s on slow `bd config set` calls. That fix landed 2026-05-01,
       # post-tag. Bump rev when a v1.0.1+ release ships.
       version = "1.0.0-unstable-2026-05-04";
-      rev = "dfe314b3eec06f545dd5ccb0b1d9d42c18698b5f";
+      rev = "481ea61b6f34e0045017e51bb0456dc076da9ec7";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "gastownhall";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-Jv1eLXONYGtAHNDg5IQ4bB3Ny6Iah1rIydIo1znWHZs=";
+        hash = "sha256-LZhpeU2sKPJ6cmLeqAc0+E99shceDo4BVgwH73F2C/U=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
