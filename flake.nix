@@ -12,13 +12,13 @@
       # bd-init timeout fix (#1264) which makes `gc start` time out at
       # 30s on slow `bd config set` calls. That fix landed 2026-05-01,
       # post-tag. Bump rev when a v1.0.1+ release ships.
-      version = "1.0.0-unstable-2026-05-02";
-      rev = "4be4d44be6df85b1c8b7f20c4afcc98fc1713dcc";
+      version = "1.0.0-unstable-2026-05-04";
+      rev = "dfe314b3eec06f545dd5ccb0b1d9d42c18698b5f";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "gastownhall";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-4d0seiqbwoXEeQ6CM3Y9Yuo9YWTYAFSodNcu7Tq3g6A=";
+        hash = "sha256-Jv1eLXONYGtAHNDg5IQ4bB3Ny6Iah1rIydIo1znWHZs=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
