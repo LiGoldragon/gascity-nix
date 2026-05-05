@@ -8,18 +8,16 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     let
-      # Tracking LiGoldragon/gascity past v1.0.0 — v1.0.0 shipped without the
-      # bd-init timeout fix (#1264) which makes `gc start` time out at
-      # 30s on slow `bd config set` calls. That fix landed 2026-05-01,
-      # post-tag. This fork rev also carries the gpt-5.4 model family.
-      # Bump rev when a v1.0.1+ release ships with both changes.
-      version = "1.0.0-unstable-2026-05-04";
-      rev = "4e8fc32647713b1aa695e406498e9a19be698a9b";
+      # Tracks LiGoldragon/gascity rebase-v1.0.0: upstream v1.0.0 plus
+      # the Codex gpt-5.4 model family choices.
+      # Bump rev when an upstream tagged release carries these choices.
+      version = "1.0.0-codex-2026-05-05";
+      rev = "76f46b4576c9d3efe0fe77c038fc69c72f992186";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-Rxb0/10xg6A8yBcoD++rVmr6aLy/Toq4RENy5V5Y+Ew=";
+        hash = "sha256-An5P3y2qP2XQy1UlH0lSIvk7vkB2vGGrBDC/X4n9OFI=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
