@@ -9,16 +9,17 @@
   outputs = { self, nixpkgs, flake-utils }:
     let
       # Tracks LiGoldragon/gascity rebase-v1.0.0: upstream v1.0.0 plus
-      # the Codex gpt-5.4 model family choices, managed idle sleep, and
-      # session wake metadata no-op suppression.
+      # the Codex gpt-5.4 model family choices, managed idle sleep, the
+      # managed bd SQL issue-prefix repair, and stable-session metadata
+      # no-op suppression.
       # Bump rev when an upstream tagged release carries these changes.
-      version = "1.0.0-codex-2026-05-05";
-      rev = "a720d067c0fcc9b77054222da5be6fac98091217";
+      version = "1.0.0-codex-2026-05-06";
+      rev = "6462edf36cefa88bde03f19439173a3bc821a708";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-lF4mKtraUZPrX9ADuXdCPknI8g2zooGvBbFXxmK+Tnc=";
+        hash = "sha256-ywKBMrUfYwnKkywnJ765UbAs0/rgL9vrcOuYu8GpfjI=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
