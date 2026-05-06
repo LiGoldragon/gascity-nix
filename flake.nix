@@ -16,15 +16,16 @@
       # builtin pack projections, disables the daemon-only Dolt compactor
       # order, suppresses cached no-op metadata writes that were amplifying
       # idle session updates, avoids recurring wake-failure/pending-create
-      # reconciliation churn, and retries stopped pending creates immediately.
+      # reconciliation churn, retries stopped pending creates immediately,
+      # and removes the control-dispatcher's idle sweep by default.
       # Bump rev when an upstream tagged release carries these changes.
       version = "1.0.0-codex-2026-05-06";
-      rev = "0bc6e58522eacdf3da7f2567724d97c9ab7b4ad7";
+      rev = "242480d2e413f37fde720baca6048d52d31c2aca";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-HjFyk4vfXoSrFdvC8co6NCDhdt0lphzC55aAmRwFxHo=";
+        hash = "sha256-62wR4xAHQEoEh/RmY1QCE9hTz6dXZgtgClNIHMUN8qI=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
