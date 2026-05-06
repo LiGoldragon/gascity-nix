@@ -2,11 +2,12 @@
 
 ## Patch risk
 
-This patch changes the gascity source pointer from `gascity 4e994724`
-to `gascity 5b14365c`. The new pin keeps the prior stale managed
+This patch changes the gascity source pointer from `gascity 5b14365c`
+to `gascity 0bc6e585`. The new pin keeps the prior stale managed
 builtin-pack pruning, daemon-only Dolt compactor disablement, and cached
 metadata no-op guard. It adds session reconciliation fixes for already-clear
-wake failure metadata and pending-create in-flight accounting.
+wake failure metadata, pending-create in-flight accounting, and immediate
+retry of stopped pending-create sessions.
 
 The main breakage risk is a packaging mismatch: source hash drift,
 Go vendor hash drift, or a runtime assumption in the newer gascity
@@ -32,16 +33,21 @@ candidate before this packaging pin moved:
   cleanup after work drained. `5b14365c` also carries pending-create
   in-flight accounting so the reconciler does not mint duplicate pool
   sessions while startup is still inside its timeout window.
+- Restarting Criopolis with that throttle exposed a follow-up delay: mayor
+  was left `state=stopped` with `pending_create_claim=true` and was retried
+  only after the full startup timeout. `0bc6e585` narrows the throttle to
+  actual `state=creating` beads so stopped claims retry on the next tick.
 
 This repository must still build after the pin update, and
 `./result/bin/gc version --long` must report
-`5b14365c244728960aa6ab13bfa34580b67a555a`.
+`0bc6e58522eacdf3da7f2567724d97c9ab7b4ad7`.
 
 Targeted verification passed in the gascity worktree:
 
 - `GC_FAST_UNIT=1 go test ./internal/beads -run 'TestCachingStoreSetMetadata'`
 - `GC_FAST_UNIT=1 go test ./cmd/gc -run 'TestMaterializedBuiltinPackOrdersScanWithoutWarnings|TestMaterializeBuiltinPacks_PrunesStaleManagedFiles'`
 - `GC_FAST_UNIT=1 go test ./cmd/gc -run 'TestCityRuntimeFullReconcileLoop_DoesNotMintPoolSessionWhilePendingCreateInFlight|TestComputePoolDesiredStates_InFlightCreateThrottlesNewScaleRequests|TestComputePoolDesiredStates_InFlightCreateKeepsActiveAndAddsNoNew|TestClearWakeFailuresSkipsAlreadyClearMetadata|TestReconcileSessionBeads_PendingCreateStartAttemptWaitsForStartupTimeout|TestReconcileSessionBeads_PendingCreateRetriesAfterStartupTimeout|TestReconcileSessionBeads_DrainAckHonoredAfterSessionExit'`
+- `GC_FAST_UNIT=1 go test ./cmd/gc -run 'TestPendingCreateStartInFlightRequiresCreatingState|TestReconcileSessionBeads_PendingCreateStartAttemptWaitsForStartupTimeout|TestReconcileSessionBeads_PendingCreateRetriesAfterStartupTimeout'`
 
 `GC_FAST_UNIT=1 go test ./cmd/gc ./internal/session ./internal/beads` also
 passed `internal/session` and `internal/beads`, but `cmd/gc` hit its

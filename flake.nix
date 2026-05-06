@@ -15,16 +15,16 @@
       # finalization races. The current pin also prunes stale managed
       # builtin pack projections, disables the daemon-only Dolt compactor
       # order, suppresses cached no-op metadata writes that were amplifying
-      # idle session updates, and avoids recurring wake-failure/pending-create
-      # reconciliation churn.
+      # idle session updates, avoids recurring wake-failure/pending-create
+      # reconciliation churn, and retries stopped pending creates immediately.
       # Bump rev when an upstream tagged release carries these changes.
       version = "1.0.0-codex-2026-05-06";
-      rev = "5b14365c244728960aa6ab13bfa34580b67a555a";
+      rev = "0bc6e58522eacdf3da7f2567724d97c9ab7b4ad7";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-cvDCf8UiPL3QxJ+2RygamiKiFFC/9F2wuHl0frGpWdw=";
+        hash = "sha256-HjFyk4vfXoSrFdvC8co6NCDhdt0lphzC55aAmRwFxHo=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
