@@ -12,15 +12,16 @@
       # the Codex gpt-5.4 model family choices, managed idle sleep, the
       # managed bd SQL issue-prefix repair, stable-session metadata
       # no-op suppression, and explicit wake claims that survive drain
-      # finalization races.
+      # finalization races. The current pin also prunes stale managed
+      # builtin pack projections so removed bundled orders cannot keep firing.
       # Bump rev when an upstream tagged release carries these changes.
       version = "1.0.0-codex-2026-05-06";
-      rev = "60732751665b4c70685f06a425febbe96eeb6286";
+      rev = "881f57bd5cc8d927ca1dcc1e5e5c1b036246ff8a";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-GTz6xNrBdcQry2CO4htvZ53Dx1ir1uV5x7Fwjk2+nRA=";
+        hash = "sha256-gRqdDWxa3jv/ROPLsInyyGuRgDCoeucy4vf6DucZfX0=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
