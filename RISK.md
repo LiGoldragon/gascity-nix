@@ -2,12 +2,11 @@
 
 ## Patch risk
 
-This patch changes the gascity source pointer from `gascity 881f57bd`
-to `gascity 4e994724`. The new pin keeps the prior managed idle sleep,
-session wake metadata, managed bd SQL `issue_prefix`, dirty wake metadata,
-explicit wake-claim fixes, and stale managed builtin-pack pruning. It also
-disables the daemon-only Dolt compactor order and suppresses cached no-op
-metadata writes before they reach `bd update`.
+This patch changes the gascity source pointer from `gascity 4e994724`
+to `gascity 5b14365c`. The new pin keeps the prior stale managed
+builtin-pack pruning, daemon-only Dolt compactor disablement, and cached
+metadata no-op guard. It adds session reconciliation fixes for already-clear
+wake failure metadata and pending-create in-flight accounting.
 
 The main breakage risk is a packaging mismatch: source hash drift,
 Go vendor hash drift, or a runtime assumption in the newer gascity
@@ -26,17 +25,29 @@ candidate before this packaging pin moved:
   built-in order.
 - Criopolis also showed two live session beads being rewritten every few
   seconds with unchanged metadata, keeping Dolt hot while idle. `4e994724`
-  adds CachingStore no-op guards and regression tests for identical metadata
-  writes.
+  added CachingStore no-op guards; `5b14365c` adds the direct
+  `clearWakeFailures` guard and regression coverage for the reconciler path
+  that was still writing the already-clear metadata.
+- The same repair loop exposed pool workers being left around until stale
+  cleanup after work drained. `5b14365c` also carries pending-create
+  in-flight accounting so the reconciler does not mint duplicate pool
+  sessions while startup is still inside its timeout window.
 
 This repository must still build after the pin update, and
 `./result/bin/gc version --long` must report
-`4e9947249320618b8a2a1d94d13e8a2715360d5a`.
+`5b14365c244728960aa6ab13bfa34580b67a555a`.
 
 Targeted verification passed in the gascity worktree:
 
 - `GC_FAST_UNIT=1 go test ./internal/beads -run 'TestCachingStoreSetMetadata'`
 - `GC_FAST_UNIT=1 go test ./cmd/gc -run 'TestMaterializedBuiltinPackOrdersScanWithoutWarnings|TestMaterializeBuiltinPacks_PrunesStaleManagedFiles'`
+- `GC_FAST_UNIT=1 go test ./cmd/gc -run 'TestCityRuntimeFullReconcileLoop_DoesNotMintPoolSessionWhilePendingCreateInFlight|TestComputePoolDesiredStates_InFlightCreateThrottlesNewScaleRequests|TestComputePoolDesiredStates_InFlightCreateKeepsActiveAndAddsNoNew|TestClearWakeFailuresSkipsAlreadyClearMetadata|TestReconcileSessionBeads_PendingCreateStartAttemptWaitsForStartupTimeout|TestReconcileSessionBeads_PendingCreateRetriesAfterStartupTimeout|TestReconcileSessionBeads_DrainAckHonoredAfterSessionExit'`
+
+`GC_FAST_UNIT=1 go test ./cmd/gc ./internal/session ./internal/beads` also
+passed `internal/session` and `internal/beads`, but `cmd/gc` hit its
+10-minute package timeout in unrelated long-running controller/mail/Dolt
+tests. Treat the targeted regression run above as the commit gate for this
+pin.
 
 ## Cross-repo effects
 

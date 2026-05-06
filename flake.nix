@@ -14,16 +14,17 @@
       # no-op suppression, and explicit wake claims that survive drain
       # finalization races. The current pin also prunes stale managed
       # builtin pack projections, disables the daemon-only Dolt compactor
-      # order, and suppresses cached no-op metadata writes that were
-      # amplifying idle session updates.
+      # order, suppresses cached no-op metadata writes that were amplifying
+      # idle session updates, and avoids recurring wake-failure/pending-create
+      # reconciliation churn.
       # Bump rev when an upstream tagged release carries these changes.
       version = "1.0.0-codex-2026-05-06";
-      rev = "4e9947249320618b8a2a1d94d13e8a2715360d5a";
+      rev = "5b14365c244728960aa6ab13bfa34580b67a555a";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-gRqdDWxa3jv/ROPLsInyyGuRgDCoeucy4vf6DucZfX0=";
+        hash = "sha256-cvDCf8UiPL3QxJ+2RygamiKiFFC/9F2wuHl0frGpWdw=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
