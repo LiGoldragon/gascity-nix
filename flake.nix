@@ -13,10 +13,12 @@
       # managed bd SQL issue-prefix repair, stable-session metadata
       # no-op suppression, and explicit wake claims that survive drain
       # finalization races. The current pin also prunes stale managed
-      # builtin pack projections so removed bundled orders cannot keep firing.
+      # builtin pack projections, disables the daemon-only Dolt compactor
+      # order, and suppresses cached no-op metadata writes that were
+      # amplifying idle session updates.
       # Bump rev when an upstream tagged release carries these changes.
       version = "1.0.0-codex-2026-05-06";
-      rev = "881f57bd5cc8d927ca1dcc1e5e5c1b036246ff8a";
+      rev = "4e9947249320618b8a2a1d94d13e8a2715360d5a";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
