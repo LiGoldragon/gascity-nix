@@ -15,12 +15,12 @@
       # sessions.
       # Bump rev when an upstream tagged release carries these changes.
       version = "1.0.0-codex-2026-05-06";
-      rev = "cdaac218b92a913139214c0cf91277bc697b021c";
+      rev = "b56bc3cc807fb8ab30160bd15057dcda453c8e38";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-Dysh67ReU2IfV5xh7p7do93GiwyiKj3zghRcADfTZKE=";
+        hash = "sha256-6Gp4vjmWAGvZd2xX5Zcn09ZtAGDODYE3LYinRrnRHzo=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
