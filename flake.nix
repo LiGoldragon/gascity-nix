@@ -10,17 +10,17 @@
     let
       # Tracks LiGoldragon/gascity rebase-v1.0.0: upstream v1.0.0 plus
       # the Codex gpt-5.4 model family choices, managed idle sleep, the
-      # managed bd SQL issue-prefix repair, and stable-session metadata
-      # no-op suppression plus explicit wake start requests for dormant
-      # sessions.
+      # managed bd SQL issue-prefix repair, stable-session metadata
+      # no-op suppression, and explicit wake claims that survive drain
+      # finalization races.
       # Bump rev when an upstream tagged release carries these changes.
       version = "1.0.0-codex-2026-05-06";
-      rev = "b56bc3cc807fb8ab30160bd15057dcda453c8e38";
+      rev = "60732751665b4c70685f06a425febbe96eeb6286";
       src = pkgs: pkgs.fetchFromGitHub {
         owner = "LiGoldragon";
         repo = "gascity";
         inherit rev;
-        hash = "sha256-6Gp4vjmWAGvZd2xX5Zcn09ZtAGDODYE3LYinRrnRHzo=";
+        hash = "sha256-GTz6xNrBdcQry2CO4htvZ53Dx1ir1uV5x7Fwjk2+nRA=";
       };
 
       mkGascity = pkgs: pkgs.buildGo125Module {
